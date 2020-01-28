@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="game.personaje_search">
+            <field name="name">Personajes search</field>
+            <field name="model">game.personaje</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="reino"/>
+                    <field name="vida" string="Min Vida"  filter_domain="[('vida', '&gt;', self)]" />
+                    <filter name="poderosos" string="Poderosos" domain="[('ataque', '=', 20)]"/>
+                    <filter name="vida" string="Vivos" domain="[('vida', '&gt;', 0)]"/>
+                    <filter name="group_by_reino" string="reino" context="{'group_by': 'reino'}"/>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>

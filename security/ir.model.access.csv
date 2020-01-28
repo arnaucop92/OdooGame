@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_game_player,game.player,model_game_player,,1,1,1,1
+access_game_casa,game.casa,model_game_casa,,1,1,1,1
+access_game_reino,game.reino,model_game_reino,,1,1,1,1
+access_game_reino_template,game.reino_template,model_game_reino_template,,1,1,1,1
+access_game_personaje,game.personaje,model_game_personaje,,1,1,1,1
+access_game_personaje_template,game.personaje_template,model_game_personaje_template,,1,1,1,1
+access_game_recurso,game.recurso,model_game_recurso,,1,1,1,1
+access_game_coste,game.coste,model_game_coste,,1,1,1,1
+access_game_raw,game.raw,model_game_raw,,1,1,1,1
+access_game_raws,game.raws,model_game_raws,,1,1,1,1

@@ -1,0 +1,410 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="game.list">
+      <field name="name">game list</field>
+      <field name="model">game.game</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+    <record model="ir.ui.view" id="game.player_list">
+      <field name="name">player list</field>
+      <field name="model">game.player</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="casa"/>
+          <field name="reinos" widget="many2many_tags"/>
+          <field name="recursos" widget="many2many_tags"/>
+          <field name="raws" widget="many2many_tags"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="game.player_form">
+            <field name="name">player form</field>
+            <field name="model">game.player</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group string="Datos Personales">
+                                <field name="imagen" widget="image" style="width:100px;"/>
+                                <field name="name"/>
+                                <field name="casa"/>
+                            </group>
+                            <group string="Mochila">
+                                <field name="dinero"/>
+                            </group>
+                             <!--<field name="reinos"/>
+                             <field name="recursos"/>
+                             <field name="raws"/>
+                             <button name="create_new_reino" type="object" string="Añadir reino"
+                                    class="oe_highlight"/>-->
+                        </group>
+                        <notebook>
+                            <page string="Reinos">
+                                <field name="reinosk">
+                                    <kanban>
+                                        <field name="name"/>
+                                        <field name="id"/>
+                                        <field name="image_small"/>
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <div t-attf-class="oe_kanban_card oe_kanban_global_click"
+                                                     style="-webkit-box-flex: 0; flex: none; width: 100px; min-width:100px; margin: 0px; border: none;">
+                                                    <a type="open">
+                                                        <img class="oe_kanban_image"
+                                                             t-att-src="kanban_image('game.reino', 'image_small', record.id.value)"/>
+                                                    </a>
+                                                    <div class="oe_product_desc">
+                                                        <a type="open">
+                                                            <field name="name"></field>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                                <field name="reinos">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="imagen" widget="image" width="70px;"/>
+                                        <field name="jugador"></field>
+                                        <field name="personajes" widget="many2many_tags"></field>
+                                        <field name="recursos" widget="many2many_tags"></field>
+                                    </tree>
+                                </field>
+                                <button name="create_new_reino" type="object" string="Añadir reino"
+                                    class="oe_highlight"/>
+                            </page>
+                            <page string="Recursos">
+                                <field name="recursos">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="imagen" widget="image" width="70px;"/>
+                                        <field name="producciones" widget="many2many_tags"/>
+                                        <field name="costes" widget="many2many_tags"/>
+                                        <field name="reino" />
+                                        <field name="nivel"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Materiales">
+                                <field name="raws">
+                                    <tree decoration-danger="cantidad&lt;5" decoration-warning="cantidad&gt;5">
+                                        <field name="name"/>
+                                        <field name="jugador"/>
+                                        <field name="raw"/>
+                                        <field name="cantidad"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    <record model="ir.ui.view" id="game.casa_list">
+      <field name="name">casa list</field>
+      <field name="model">game.casa</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="imagen" widget="image" width="70px;"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="game.casa_form">
+            <field name="name">casa form</field>
+            <field name="model">game.casa</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                             <field name="name"/>
+                            <field name="imagen" widget="image" width="10%"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    <record model="ir.ui.view" id="game.reino_list">
+      <field name="name">reino list</field>
+      <field name="model">game.reino</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="imagen" widget="image" width="70px;"/>
+          <field name="jugador"></field>
+          <field name="personajes" widget="many2many_tags" mode="kanban"></field>
+          <field name="recursos" widget="many2many_tags"></field>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="game.reino_form">
+            <field name="name">reino form</field>
+            <field name="model">game.reino</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="imagen" widget="image" width="100px;"/>
+                            <field name="jugador"></field>
+                            <field name="personajes"></field>
+                            <field name="available_resources">
+                                <tree>
+                                    <field name="name"/>
+                                    <button name="build_it" string="Build it" type="object"
+                                            context="{'reino':parent.id}"/>
+                                </tree>
+                            </field>
+                            <field name="recursos"></field>
+                            <button name="create_new_character" type="object" string="Crear nuevo personaje"
+                                    class="oe_highlight"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    <record model="ir.ui.view" id="game.personaje_list">
+      <field name="name">personaje list</field>
+      <field name="model">game.personaje</field>
+      <field name="arch" type="xml">
+        <tree>
+                <field name="name"/>
+                <field name="imagen" widget="image" width="70px;"/>
+                <field name="reino"/>
+                <field name="ataque"/>
+                <field name="defensa"/>
+                <field name="vida"/>
+                <field name="start_date"/>
+        </tree>
+      </field>
+    </record>
+     <record model="ir.ui.view" id="personaje_calendar_view">
+            <field name="name">personaje.calendar</field>
+            <field name="model">game.personaje</field>
+            <field name="arch" type="xml">
+                <calendar string="Session Calendar" date_start="start_date">
+                    <field name="name"/>
+                    <field name="reino"/>
+                </calendar>
+            </field>
+     </record>
+
+    <record model="ir.ui.view" id="game.personaje_form">
+            <field name="name">personaje form</field>
+            <field name="model">game.personaje</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="imagen" widget="image" width="30%"/>
+                            <field name="reino"/>
+                            <field name="ataque"/>
+                            <field name="defensa"/>
+                            <field name="vida"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+      <record model="ir.ui.view" id="game.personaje_kanban">
+          <field name="name">personaje kanban</field>
+          <field name="model">game.personaje</field>
+          <field name="arch" type="xml">
+              <kanban>
+                  <field name="name"/><field name="id"/>
+                  <field name="imagen" widget="image" width="30%"/>
+                  <field name="reino"/>
+                  <field name="ataque"/>
+                  <field name="defensa"/>
+                  <field name="vida"/>
+                  <templates>
+                      <t t-name="kanban-box">
+                          <div  t-attf-class="
+                            oe_kanban_card
+                            oe_kanban_global_click
+                            o_kanban_record_has_image_fill
+                           " >
+                              <div class="oe_game_kanban_div_image">
+                                  <img class="oe_kanban_image oe_character_kanban_image"
+                                       t-att-alt="record.name.value"
+                                       t-att-src="kanban_image('game.personaje', 'imagen', record.id.value)"/>
+                              </div>
+                              <div class="oe_kanban_details oe_game_kanban_dropdown">
+                                  <a type="open">
+                                      <h4>
+                                          <field name="name"/>
+                                      </h4>
+                                  </a>
+                                  <p>
+                                      Reino:<field name="reino"/>
+                                      Ataque:<field name="ataque"/>
+                                      Defensa:<field name="defensa"/>
+                                      Vida:<field name="vida"/>
+                                  </p>
+                                  <div class=".oe_game_attr_list oe_game_kanban_dropdown-content">
+                                      <ul>
+                                          <li>Reino:<field name="reino"/></li>
+                                          <li>Ataque:<field name="ataque"/></li>
+                                          <li>Defensa:<field name="defensa"/></li>
+                                          <li>Vida:<field name="vida"/></li>
+                                      </ul>
+                                  </div>
+                              </div>
+                          </div>
+                      </t>
+                  </templates>
+              </kanban>
+          </field>
+
+      </record>
+      <!-- RECURSOS-->
+      <record model="ir.ui.view" id="game.recurso_list">
+      <field name="name">recurso list</field>
+      <field name="model">game.recurso</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="imagen" widget="image" width="70px;"/>
+            <field name="producciones" widget="many2many_tags"/>
+            <field name="costes"/>
+            <field name="reino"/>
+            <field name="nivel"/>
+        </tree>
+      </field>
+    </record>
+
+     <record model="ir.ui.view" id="game.recurso_form">
+            <field name="name">recurso form</field>
+            <field name="model">game.recurso</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="imagen" widget="image" width="30%"/>
+                            <field name="producciones"/>
+                            <field name="costes"/>
+                            <field name="reino"/>
+                            <field name="nivel"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+       <record model="ir.ui.view" id="game.raw_list">
+      <field name="name">material list</field>
+      <field name="model">game.raw</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="imagen" widget="image" width="70px;"/>
+        </tree>
+      </field>
+    </record>
+
+       <record model="ir.ui.view" id="game.raw_form">
+            <field name="name">material form</field>
+            <field name="model">game.raw</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="imagen" widget="image" width="30%"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="game.player_action_window">
+      <field name="name">Jugadores</field>
+      <field name="res_model">game.player</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.act_window" id="game.casa_action_window">
+        <field name="name">Casas</field>
+        <field name="res_model">game.casa</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.act_window" id="game.reino_action_window">
+        <field name="name">Reinos</field>
+        <field name="res_model">game.reino</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.act_window" id="game.personaje_action_window">
+        <field name="name">Personajes</field>
+        <field name="res_model">game.personaje</field>
+        <field name="view_mode">kanban,tree,form,calendar</field>
+    </record>
+    <record model="ir.actions.act_window" id="game.recurso_action_window">
+        <field name="name">Recursos</field>
+        <field name="res_model">game.recurso</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.act_window" id="game.raw_action_window">
+        <field name="name">Material</field>
+        <field name="res_model">game.raw</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="game.action_server">
+      <field name="name">game server</field>
+      <field name="model_id" ref="model_game_game"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+
+    <menuitem name="Game of Thrones Game" id="game.menu_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Menu" id="game.menu_1" parent="game.menu_root"/>
+
+    <!-- actions -->
+    <menuitem name="Jugadores" id="game.menu_player" parent="game.menu_1"
+              action="game.player_action_window"/>
+      <menuitem name="Casas" id="game.menu_casa" parent="game.menu_1"
+      action="game.casa_action_window"/>
+      <menuitem name="Reinos" id="game.menu_reino" parent="game.menu_1"
+      action="game.reino_action_window"/>
+      <menuitem name="Personajes" id="game.menu_personaje" parent="game.menu_1"
+          action="game.personaje_action_window"/>
+    <menuitem name="Recursos" id="game.menu_3_list" parent="game.menu_1"
+          action="game.recurso_action_window"/>
+     <menuitem name="Material" id="game.menu_5_list" parent="game.menu_1"
+          action="game.raw_action_window"/>
+  </data>
+</odoo>
